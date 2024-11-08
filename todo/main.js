@@ -1,15 +1,8 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-const */
-/* eslint-disable linebreak-style */
-/* eslint-disable eol-last */
 const form = document.getElementById("form");
 const titleElement = document.getElementById("title");
-const addBtn = document.getElementById("add-btn");
-const removeBtn = document.getElementById("remove-btn");
-const taskList = document.getElementById("taskList");
+const taskList = document.getElementById("task-list");
 // tạo biến này để chứa dữ liệu nhập vào
-let todoSaved = JSON.parse(localStorage.getItem("todos") || "[]");
+let todoSaved = JSON.parse(localStorage.getItem("todos")) || [];
 
 // hàm này dùng để tạo random id sau này dùng để gán vào todo
 function generatedRandomId(n, prefix = "todo-") {
@@ -31,8 +24,10 @@ function validationTodo(todo) {
   return true;
 }
 
+// from line 28 to line 52 is new code
+form.addEventListener("submit", addNewTask);
 // đây là trung tâm xử lí của todolist
-form.addEventListener("submit", (event) => {
+function addNewTask(event) {
   // preventDefault dùng để ngăn không cho trình duyệt load lại trang
   event.preventDefault();
   // tạo biến todo để ta lấy dữ liệu từ người dùng
@@ -54,7 +49,32 @@ form.addEventListener("submit", (event) => {
   displayTodo(todoSaved);
   // trả về rỗng khi hoàn thành nhập task vào
   titleElement.value = "";
-});
+}
+
+// from line 55 to line 77 is old code
+// form.addEventListener("submit", (event) => {
+//   // preventDefault dùng để ngăn không cho trình duyệt load lại trang
+//   event.preventDefault();
+//   // tạo biến todo để ta lấy dữ liệu từ người dùng
+//   const todo = {
+//     // title chính là nội dung người dùng ghi vào đây
+//     title: titleElement.value,
+//     // với status false thì ta có thể đổi nội dung khi xử lí ở các hàm sau này
+//     status: false,
+//     // với id để dựa vào id chúng ta có thể chọn để xóa hoặc thay đổi trạng thái cho todo
+//     id: generatedRandomId(4),
+//   };
+//   // if này dùng để bắt buộc người dùng phải đưa dữ liệu vào
+//   if (!validationTodo(todo)) return;
+//   // đưa những dữ liệu người dùng nhập vào mảng này todoSaved
+//   todoSaved.push(todo);
+//   // tiến hành lưu trữ data vào trong LocalStorage
+//   saveToLocalStorage();
+//   // lấy data từ trong LocalStorage hiển thị trên trình duyệt
+//   displayTodo(todoSaved);
+//   // trả về rỗng khi hoàn thành nhập task vào
+//   titleElement.value = "";
+// });
 
 // tạo hàm để mã hóa dữ liệu và đưa vào localStorage
 function saveToLocalStorage() {
@@ -86,7 +106,7 @@ function displayTodo(todos) {
     taskList.appendChild(trElement);
   });
   // cập nhật lại giá trị của todos
-  localStorage.setItem("todos", JSON.stringify(todoSaved));
+  saveToLocalStorage();
 }
 
 // tạo hàm đê thay đổi status của mỗi todo khi click
