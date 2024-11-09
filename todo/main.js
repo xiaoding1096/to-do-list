@@ -139,4 +139,3 @@ function removeAll() {
 }
 
 displayTodo(todoSaved);
-// copy file
